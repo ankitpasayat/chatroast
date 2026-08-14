@@ -30,8 +30,8 @@ yours does not.
 
 **What happens to your data and your key.** The page is static files served by
 GitHub Pages - there is no server of ours to send anything to. The transcript and
-your key go to exactly one place, the API provider you picked, at the moment you
-click Generate. Chats and reports are stored in your own browser (IndexedDB);
+your key go to exactly one place, the API provider you picked, when you click
+Generate or List models. Chats and reports are stored in your own browser (IndexedDB);
 settings live in localStorage; the key is kept in memory only, unless you
 explicitly tick "remember".
 

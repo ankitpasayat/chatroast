@@ -63,14 +63,18 @@ function newId(): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-async function post(url: string, headers: Record<string, string>, body: unknown): Promise<Response> {
+async function request(url: string, init: RequestInit): Promise<Response> {
   try {
-    return await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+    return await fetch(url, init);
   } catch (err) {
     throw new Error(
       `Could not reach ${url}. Either you are offline, or the provider is refusing requests that come from a browser (CORS). Details: ${String(err)}`,
     );
   }
+}
+
+function post(url: string, headers: Record<string, string>, body: unknown): Promise<Response> {
+  return request(url, { method: 'POST', headers, body: JSON.stringify(body) });
 }
 
 /** Human-readable message for a non-2xx reply, using the body's own wording. */
@@ -239,6 +243,36 @@ function callProvider(settings: Settings, turns: ChatTurn[], onDelta: DeltaFn): 
   return providerOf(settings.provider).api === 'anthropic'
     ? callAnthropic(settings, turns, onDelta)
     : callOpenAiCompatible(settings, turns, onDelta);
+}
+
+/**
+ * The model ids this provider will serve, sorted. One GET to the provider's
+ * models endpoint, sent with the key where the provider requires one; both wire
+ * formats use the same `{ data: [{ id }] }` reply shape.
+ */
+export async function listModels(settings: Settings): Promise<string[]> {
+  const provider = providerOf(settings.provider);
+  const res =
+    provider.api === 'anthropic'
+      ? await request(`${anthropicBase(settings.baseUrl)}/v1/models?limit=1000`, {
+          headers: {
+            'x-api-key': settings.apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true',
+          },
+        })
+      : await request(`${trimSlash(settings.baseUrl)}/models`, {
+          headers:
+            settings.apiKey.trim() === '' ? {} : { Authorization: `Bearer ${settings.apiKey}` },
+        });
+  if (!res.ok) throw await httpError(res, provider.label);
+
+  const parsed = obj(await res.json().catch(() => null));
+  const data = parsed?.['data'];
+  const ids = (Array.isArray(data) ? data : [])
+    .map((m) => strOf(obj(m), 'id'))
+    .filter((id): id is string => id !== null);
+  return [...new Set(ids)].sort();
 }
 
 // ------------------------------------------------------------ reply -> Report

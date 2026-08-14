@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* before first paint: dark only when explicitly chosen, system preference is not guessed at */
+try { if (localStorage.getItem('chatroast.theme') === 'dark') document.documentElement.classList.add('dark'); } catch (e) {}</script>
 <title>What does Otis think of your group chat?</title>
 <meta name="description" content="Drop a WhatsApp chat export in, bring your own API key, and get a report on your group written by an AI with no filter. Everything runs in your browser.">
 <link rel="stylesheet" href="./style.css">
@@ -18,6 +20,8 @@
 </noscript>
 
 <main class="column" id="app"></main>
+
+<button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">Dark</button>
 
 <!-- ============================ landing ============================ -->
 <template id="t-landing">
@@ -122,9 +126,19 @@
 
     <label class="field" for="f-model">
       <span class="field-label">Model</span>
-      <input type="text" id="f-model" spellcheck="false" autocomplete="off" autocapitalize="off">
+      <span class="key-row">
+        <input type="text" id="f-model" list="models-list" spellcheck="false" autocomplete="off" autocapitalize="off">
+        <button type="button" class="btn ghost" id="f-models">List models</button>
+      </span>
+      <datalist id="models-list"></datalist>
     </label>
     <p class="note" id="model-help"></p>
+    <p class="note" id="models-note">
+      List models asks the provider above which models it offers: one request, sent with your key
+      where the provider requires one, nothing else. If you would rather not, model names are also
+      in your provider's own docs.
+    </p>
+    <p class="status" id="models-status" role="status" aria-live="polite"></p>
 
     <aside class="trust" aria-labelledby="trust-h">
       <h3 class="trust-h" id="trust-h">Warning: before you paste a key</h3>
@@ -133,7 +147,7 @@
         chatroast is a static, open-source page: there is no server, no analytics, and nobody to
         send your key to. Your key is stored only in this browser, or only in memory if you leave
         "remember" unticked, and it is sent to exactly one place, the API provider you pick above,
-        at the moment you click Generate.
+        when you click Generate or List models.
       </p>
       <p>
         Do not take our word for it:
@@ -145,7 +159,7 @@
       <p>
         If you would rather not paste a key at all, run chatroast locally instead: see the
         <a href="https://github.com/ankitpasayat/chatroast#readme">README</a>. Use a key with a
-        spending limit, and do not enter keys on shared computers.
+        spending limit, and <strong>do not enter keys on shared computers</strong>.
       </p>
     </aside>
 

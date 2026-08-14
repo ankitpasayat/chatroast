@@ -3,6 +3,7 @@
  * still missing, inline on the generate screen.
  */
 import { byId, el, view } from './dom.js';
+import { listModels } from './providers.js';
 import {
   PROVIDERS,
   type Provider,
@@ -28,6 +29,9 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
   const forgetBtn = byId<HTMLButtonElement>('f-forget');
   const status = byId('f-status');
   const help = byId('model-help');
+  const modelsBtn = byId<HTMLButtonElement>('f-models');
+  const modelsList = byId<HTMLDataListElement>('models-list');
+  const modelsStatus = byId('models-status');
 
   for (const p of PROVIDERS) {
     const opt = document.createElement('option');
@@ -59,6 +63,48 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
     model.value = p.model;
     applyPreset(p);
     status.textContent = '';
+    modelsList.replaceChildren();
+    modelsStatus.textContent = '';
+  });
+
+  modelsBtn.addEventListener('click', () => {
+    const p = providerOf(select.value as ProviderId);
+    if (base.value.trim() === '') {
+      modelsStatus.textContent = 'Set the base URL first.';
+      return;
+    }
+    if (key.value.trim() === '' && !p.keyOptional) {
+      modelsStatus.textContent = `Add your ${p.label} API key first: the model list is behind it.`;
+      return;
+    }
+    modelsBtn.disabled = true;
+    modelsStatus.textContent = `Asking ${p.label} for its model list...`;
+    void listModels({
+      provider: p.id,
+      baseUrl: base.value.trim(),
+      model: model.value.trim(),
+      apiKey: key.value.trim(),
+      remember: remember.checked,
+    })
+      .then((ids) => {
+        modelsList.replaceChildren(
+          ...ids.map((id) => {
+            const opt = document.createElement('option');
+            opt.value = id;
+            return opt;
+          }),
+        );
+        modelsStatus.textContent =
+          ids.length === 0
+            ? `${p.label} listed no models for this key.`
+            : `${ids.length} models listed. Click into the model field, or start typing, to pick one.`;
+      })
+      .catch((err: unknown) => {
+        modelsStatus.textContent = err instanceof Error ? err.message : String(err);
+      })
+      .finally(() => {
+        modelsBtn.disabled = false;
+      });
   });
 
   showBtn.addEventListener('click', () => {

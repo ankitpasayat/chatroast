@@ -25,6 +25,7 @@ describe('web/index.html', () => {
     );
     expect(flat).toContain('there is no server, no analytics, and nobody to send your key to');
     expect(flat).toContain('sent to exactly one place, the API provider you pick above');
+    expect(flat).toContain('when you click Generate or List models');
     expect(flat).toContain('Do not take our word for it');
     expect(flat).toContain('read the source');
     expect(flat).toContain('public GitHub Action');
@@ -37,6 +38,18 @@ describe('web/index.html', () => {
     expect(html).toContain(`href="${REPO}/actions"`);
 
     expect(html.indexOf('class="trust"')).toBeLessThan(html.indexOf('id="f-key"'));
+  });
+
+  it('discloses what the List models button sends, next to it', () => {
+    expect(flat).toContain('List models asks the provider above which models it offers');
+    expect(flat).toContain('one request, sent with your key where the provider requires one');
+    expect(html.indexOf('id="f-models"')).toBeLessThan(html.indexOf('id="models-note"'));
+  });
+
+  it('applies the saved theme before first paint and ships the toggle', () => {
+    expect(html).toContain("localStorage.getItem('chatroast.theme')");
+    expect(html.indexOf('chatroast.theme')).toBeLessThan(html.indexOf('<link rel="stylesheet"'));
+    expect(html).toContain('id="theme-toggle"');
   });
 
   it('carries the CORS note under the provider select', () => {

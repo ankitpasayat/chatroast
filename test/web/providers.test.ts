@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { ParsedChat } from '../../shared/types.js';
-import { generateReport } from '../../web/providers.js';
+import { generateReport, listModels } from '../../web/providers.js';
 import type { Settings } from '../../web/settings.js';
 import { loadPersona, loadSampleChat } from './helpers.js';
 
@@ -297,7 +297,7 @@ describe('validation and repair', () => {
           id: 'not-a-uuid',
           chatSlug: 'some-other-chat',
           reportType: 'deluxe',
-          persona: { name: 'Brandon', tagline: 'An AI with no filter.' },
+          persona: { name: 'Dave', tagline: 'An AI with no filter.' },
         }),
       ),
     );
@@ -314,5 +314,76 @@ describe('validation and repair', () => {
     await expect(generateReport(chat, ANTHROPIC, () => {}, persona)).rejects.toThrow(
       /returned nothing/i,
     );
+  });
+});
+
+// ---------------------------------------------------------------- model lists
+
+function modelsResponse(ids: unknown[]): Response {
+  return new Response(JSON.stringify({ data: ids.map((id) => ({ id })) }), { status: 200 });
+}
+
+/** url + init of a GET call; callOf cannot be used since a GET has no body. */
+function getCallOf(fetchMock: FetchMock, i: number): { url: string; init: RequestInit } {
+  const call = fetchMock.mock.calls[i] as [string, RequestInit] | undefined;
+  if (!call) throw new Error(`fetch was not called ${i + 1} times`);
+  return { url: call[0], init: call[1] };
+}
+
+describe('listModels', () => {
+  it('GETs the Anthropic model list with the browser-access header and no body', async () => {
+    const fetchMock = mockFetch(modelsResponse(['claude-opus-5', 'claude-haiku-4-5']));
+
+    const ids = await listModels(ANTHROPIC);
+
+    const { url, init } = getCallOf(fetchMock, 0);
+    expect(url).toBe('https://api.anthropic.com/v1/models?limit=1000');
+    expect(init.method).toBeUndefined();
+    expect(init.body).toBeUndefined();
+    const headers = init.headers as Record<string, string>;
+    expect(headers['x-api-key']).toBe('sk-ant-test');
+    expect(headers['anthropic-version']).toBe('2023-06-01');
+    expect(headers['anthropic-dangerous-direct-browser-access']).toBe('true');
+
+    expect(ids).toEqual(['claude-haiku-4-5', 'claude-opus-5']);
+  });
+
+  it('GETs /models with a Bearer key on OpenAI-compatible providers', async () => {
+    const fetchMock = mockFetch(modelsResponse(['openai/gpt-5', 'anthropic/claude-sonnet-4.5']));
+
+    const ids = await listModels(OPENROUTER);
+
+    const { url, init } = getCallOf(fetchMock, 0);
+    expect(url).toBe('https://openrouter.ai/api/v1/models');
+    expect((init.headers as Record<string, string>)['Authorization']).toBe('Bearer sk-or-test');
+    expect(ids).toEqual(['anthropic/claude-sonnet-4.5', 'openai/gpt-5']);
+  });
+
+  it('sends no Authorization header when there is no key', async () => {
+    const fetchMock = mockFetch(modelsResponse(['llama']));
+
+    await listModels({
+      provider: 'ollama',
+      baseUrl: 'http://localhost:11434/v1',
+      model: '',
+      apiKey: '',
+      remember: false,
+    });
+
+    const { url, init } = getCallOf(fetchMock, 0);
+    expect(url).toBe('http://localhost:11434/v1/models');
+    expect((init.headers as Record<string, string>)['Authorization']).toBeUndefined();
+  });
+
+  it('surfaces the provider message on a non-2xx reply', async () => {
+    mockFetch(
+      new Response(JSON.stringify({ error: { message: 'invalid api key' } }), { status: 401 }),
+    );
+    await expect(listModels(OPENROUTER)).rejects.toThrow(/invalid api key/);
+  });
+
+  it('dedupes ids and drops entries without one', async () => {
+    mockFetch(modelsResponse(['b', 'a', 'b', 42, {}]));
+    await expect(listModels(OPENROUTER)).resolves.toEqual(['a', 'b']);
   });
 });
