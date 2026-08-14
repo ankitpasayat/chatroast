@@ -50,12 +50,6 @@ describe('web/index.html', () => {
     expect(html.indexOf('id="f-key"')).toBeLessThan(html.indexOf('id="f-model"'));
   });
 
-  it('keeps the model section hidden until a key is in play', () => {
-    // revealed by view-settings.ts once a key is entered or the provider needs none
-    expect(html).toMatch(/<div[^>]*id="model-block"[^>]*hidden/);
-    expect(html.indexOf('id="model-block"')).toBeLessThan(html.indexOf('id="f-model"'));
-  });
-
   it('applies the saved theme before first paint and ships the toggle', () => {
     expect(html).toContain("localStorage.getItem('chatroast.theme')");
     expect(html.indexOf('chatroast.theme')).toBeLessThan(html.indexOf('<link rel="stylesheet"'));

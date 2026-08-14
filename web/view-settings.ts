@@ -33,13 +33,6 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
   const modelsList = byId<HTMLDataListElement>('models-list');
   const modelsStatus = byId('models-status');
   const keyHelp = byId('key-help');
-  const modelBlock = byId('model-block');
-
-  /** No point offering model choice before the thing it needs: a key (where required). */
-  const syncModelBlock = (): void => {
-    modelBlock.hidden =
-      key.value.trim() === '' && !providerOf(select.value as ProviderId).keyOptional;
-  };
 
   for (const p of PROVIDERS) {
     const opt = document.createElement('option');
@@ -75,10 +68,7 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
     key.value = s.apiKey;
     remember.checked = s.remember;
     applyPreset(providerOf(s.provider));
-    syncModelBlock();
   };
-
-  key.addEventListener('input', syncModelBlock);
 
   fill(loadSettings());
 
@@ -90,7 +80,6 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
     status.textContent = '';
     modelsList.replaceChildren();
     modelsStatus.textContent = '';
-    syncModelBlock();
   });
 
   modelsBtn.addEventListener('click', () => {
