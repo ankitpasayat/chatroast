@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "shared/**/*.ts", "test/**/*.ts"]
+  "include": ["src/**/*.ts", "shared/**/*.ts", "test/**/*.ts", "web/**/*.ts"]
 }

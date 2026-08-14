@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What does Otis think of your group chat?</title>
+<meta name="description" content="Drop a WhatsApp chat export in, bring your own API key, and get a report on your group written by an AI with no filter. Everything runs in your browser.">
+<link rel="stylesheet" href="./style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23f5c451'/><text x='50' y='72' font-size='64' font-family='Georgia,serif' font-weight='700' text-anchor='middle' fill='%23111'>O</text></svg>">
+</head>
+<body>
+
+<noscript>
+  <div class="column">
+    <h1 class="display">What does Otis think of your group chat?</h1>
+    <p>This page does all of its work in your browser, so it needs JavaScript switched on.</p>
+  </div>
+</noscript>
+
+<main class="column" id="app"></main>
+
+<!-- ============================ landing ============================ -->
+<template id="t-landing">
+  <nav class="topnav"><a href="#/settings">Provider settings</a></nav>
+
+  <span class="pill">Classic Report</span>
+  <h1 class="display">What does Otis think of your group chat?</h1>
+
+  <div class="byline">
+    <span class="avatar" aria-hidden="true">O</span>
+    <div class="byline-text">
+      <strong>Otis</strong>
+      <span class="muted">An AI with no filter, too many opinions and nowhere else to be.</span>
+    </div>
+  </div>
+
+  <p class="lede">
+    Export a WhatsApp group chat, drop the file below, and Otis reads the whole thing so you do
+    not have to. Everything happens in this browser: the zip is opened here, only the transcript
+    is ever read, and the finished report is stored on this device. Writing it takes one API
+    call, made with your own key, to a provider you choose.
+  </p>
+
+  <section class="card" aria-labelledby="upload-h">
+    <h2 id="upload-h" class="sr-only">Upload your chat export</h2>
+
+    <label class="dropzone" id="dropzone" for="file">
+      <span class="drop-title">Drop your WhatsApp export here</span>
+      <span class="drop-sub">a <code>.zip</code> from "Export chat", or the <code>_chat.txt</code> inside it</span>
+      <span class="btn" aria-hidden="true">Choose a file</span>
+      <input type="file" id="file" accept=".zip,.txt,application/zip,text/plain">
+    </label>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <p class="error" id="error" role="alert" hidden></p>
+
+    <details class="how">
+      <summary>How do I export a chat?</summary>
+      <p>
+        On your phone, open the group, tap the group name, choose <strong>Export chat</strong>, then
+        <strong>Without media</strong> (fastest). With media works too, since only the text file is
+        read. Save the file, then drop it above.
+      </p>
+    </details>
+  </section>
+
+  <section class="result" id="result" hidden aria-labelledby="result-h">
+    <h2 id="result-h" class="serif">Got it.</h2>
+
+    <dl class="stats">
+      <div><dt>Group</dt><dd id="stat-group"></dd></div>
+      <div><dt>Messages</dt><dd id="stat-count"></dd></div>
+      <div><dt>Dates</dt><dd id="stat-range"></dd></div>
+    </dl>
+
+    <table class="senders" id="senders-table" hidden>
+      <caption>Top senders</caption>
+      <thead><tr><th scope="col">Who</th><th scope="col">Messages</th></tr></thead>
+      <tbody id="senders-body"></tbody>
+    </table>
+
+    <a class="btn big" id="to-generate" href="#/">Generate report</a>
+  </section>
+
+  <section class="reports" id="library" hidden aria-labelledby="library-h">
+    <h2 id="library-h" class="serif">Your reports</h2>
+    <p class="muted small">Kept in this browser only. Clearing site data deletes them.</p>
+    <div class="report-grid" id="report-grid"></div>
+  </section>
+
+  <footer class="foot muted small">
+    Opened locally with fflate. Nothing leaves this page except the one API call you ask for.
+    <a href="https://github.com/ankitpasayat/chatroast">Source on GitHub</a>.
+  </footer>
+</template>
+
+<!-- ============================ settings =========================== -->
+<template id="t-settings">
+  <h2 class="serif form-h">Provider settings</h2>
+  <p class="muted">
+    chatroast has no server of its own. To write a report it calls a model API directly from this
+    page, using a key you supply.
+  </p>
+
+  <form class="form" id="settings-form">
+    <label class="field" for="f-provider">
+      <span class="field-label">Provider</span>
+      <select id="f-provider"></select>
+    </label>
+
+    <p class="note" id="cors-note">
+      Your provider must allow browser (CORS) requests. Anthropic, OpenAI, OpenRouter and xAI do.
+      Local Ollama and LM Studio need CORS enabled in their own settings. If generation fails
+      instantly with a network error, your provider is blocking browsers; OpenRouter is the
+      easiest way to reach nearly any model from a browser.
+    </p>
+
+    <label class="field" for="f-base">
+      <span class="field-label">Base URL</span>
+      <input type="text" id="f-base" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="https://api.example.com/v1">
+    </label>
+
+    <label class="field" for="f-model">
+      <span class="field-label">Model</span>
+      <input type="text" id="f-model" spellcheck="false" autocomplete="off" autocapitalize="off">
+    </label>
+    <p class="note" id="model-help"></p>
+
+    <aside class="trust" aria-labelledby="trust-h">
+      <h3 class="trust-h" id="trust-h">Warning: before you paste a key</h3>
+      <p>
+        <strong>Pasting an API key into a website means trusting that website's code.</strong>
+        chatroast is a static, open-source page: there is no server, no analytics, and nobody to
+        send your key to. Your key is stored only in this browser, or only in memory if you leave
+        "remember" unticked, and it is sent to exactly one place, the API provider you pick above,
+        at the moment you click Generate.
+      </p>
+      <p>
+        Do not take our word for it:
+        <a href="https://github.com/ankitpasayat/chatroast">read the source</a>, since the deployed
+        files are built from it by a
+        <a href="https://github.com/ankitpasayat/chatroast/actions">public GitHub Action</a> you can
+        audit, or open DevTools, switch to the Network tab, and watch every request this page makes.
+      </p>
+      <p>
+        If you would rather not paste a key at all, run chatroast locally instead: see the
+        <a href="https://github.com/ankitpasayat/chatroast#readme">README</a>. Use a key with a
+        spending limit, and do not enter keys on shared computers.
+      </p>
+    </aside>
+
+    <label class="field" for="f-key">
+      <span class="field-label">API key</span>
+      <span class="key-row">
+        <input type="password" id="f-key" autocomplete="off" spellcheck="false" placeholder="paste your key">
+        <button type="button" class="btn ghost" id="f-show" aria-pressed="false">Show</button>
+      </span>
+    </label>
+
+    <label class="check" for="f-remember">
+      <input type="checkbox" id="f-remember">
+      <span>
+        Remember key on this device. Ticked, the key is written to this browser's local storage.
+        Unticked, it is held in memory for this tab only and is gone when you close it.
+      </span>
+    </label>
+
+    <div class="actions">
+      <button type="submit" class="btn">Save settings</button>
+      <button type="button" class="btn ghost" id="f-forget">Forget key</button>
+    </div>
+    <p class="status" id="f-status" role="status" aria-live="polite"></p>
+  </form>
+</template>
+
+<!-- ============================ generate =========================== -->
+<template id="t-generate">
+  <nav class="topnav"><a href="#/">Back</a></nav>
+
+  <span class="pill">Classic Report</span>
+  <h1 class="display" id="g-title">Ready when you are.</h1>
+
+  <dl class="stats">
+    <div><dt>Group</dt><dd id="g-group"></dd></div>
+    <div><dt>Messages</dt><dd id="g-count"></dd></div>
+    <div><dt>Transcript</dt><dd id="g-size"></dd></div>
+    <div><dt>Cost</dt><dd id="g-cost"></dd></div>
+  </dl>
+
+  <p class="note" id="g-note"></p>
+
+  <div class="actions">
+    <button class="btn big" id="g-run">Generate report</button>
+    <a class="btn ghost" href="#/settings" id="g-settings-link">Change provider</a>
+  </div>
+
+  <section class="state" id="g-progress" hidden>
+    <p><strong id="g-phase">Otis is opening the file.</strong></p>
+    <p class="muted small" id="g-metrics"></p>
+  </section>
+
+  <p class="error" id="g-error" role="alert" hidden></p>
+
+  <section id="g-settings-slot" hidden></section>
+</template>
+
+<!-- ============================= report ============================ -->
+<template id="t-report">
+  <div class="report-bar">
+    <a class="btn ghost" href="#/">Back</a>
+    <button type="button" class="btn ghost" id="r-download">Download HTML</button>
+    <button type="button" class="btn ghost" id="r-print">Print / PDF</button>
+    <button type="button" class="btn ghost danger" id="r-delete">Delete</button>
+  </div>
+  <iframe id="r-frame" class="report-frame" title="Your report" sandbox="allow-same-origin allow-modals"></iframe>
+</template>
+
+<script type="module" src="./assets/app.js"></script>
+</body>
+</html>
