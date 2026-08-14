@@ -167,21 +167,23 @@ try { var t = localStorage.getItem('chatroast.theme'); if (t === 'dark' || t ===
       </span>
     </label>
 
-    <label class="field" for="f-model">
-      <span class="field-label">Model</span>
-      <span class="key-row">
-        <input type="text" id="f-model" list="models-list" spellcheck="false" autocomplete="off" autocapitalize="off">
-        <button type="button" class="btn ghost" id="f-models">List models</button>
-      </span>
-      <datalist id="models-list"></datalist>
-    </label>
-    <p class="note" id="model-help"></p>
-    <p class="note" id="models-note">
-      List models asks the provider above which models it offers: one request, sent with your key
-      where the provider requires one, nothing else. If you would rather not, model names are also
-      in your provider's own docs.
-    </p>
-    <p class="status" id="models-status" role="status" aria-live="polite"></p>
+    <div id="model-block" hidden>
+      <label class="field" for="f-model">
+        <span class="field-label">Model</span>
+        <span class="key-row">
+          <input type="text" id="f-model" list="models-list" spellcheck="false" autocomplete="off" autocapitalize="off">
+          <button type="button" class="btn ghost" id="f-models">List models</button>
+        </span>
+        <datalist id="models-list"></datalist>
+      </label>
+      <p class="note" id="model-help"></p>
+      <p class="note" id="models-note">
+        List models asks the provider above which models it offers: one request, sent with your key
+        where the provider requires one, nothing else. If you would rather not, model names are also
+        in your provider's own docs.
+      </p>
+      <p class="status" id="models-status" role="status" aria-live="polite"></p>
+    </div>
 
     <div class="actions">
       <button type="submit" class="btn">Save settings</button>
