@@ -14,15 +14,15 @@ import type { ChatMessage, ParsedChat, SenderStat } from '../../shared/types.js'
 /** Directional marks WhatsApp sprinkles around structural bits. */
 const MARKS = /[‎‏]/g;
 
-/** `[07/02/23, 19:55:05] rest` — also 4-digit years, dd.mm.yy, am/pm, no seconds. */
+/** `[07/02/23, 19:55:05] rest` - also 4-digit years, dd.mm.yy, am/pm, no seconds. */
 const IOS_LINE =
   /^[‎‏\s]*\[(\d{1,2})[./-](\d{1,2})[./-](\d{2,4}),\s*(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(?:([ap])\.?\s?m\.?)?\s*\]\s*([\s\S]*)$/i;
 
-/** `07/02/23, 19:55 - rest` — also `7/2/23`, `7:55 pm`, `dd.mm.yy`. */
+/** `07/02/23, 19:55 - rest` - also `7/2/23`, `7:55 pm`, `dd.mm.yy`. */
 const ANDROID_LINE =
   /^[‎‏\s]*(\d{1,2})[./-](\d{1,2})[./-](\d{2,4}),\s*(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(?:([ap])\.?\s?m\.?)?\s+-\s+([\s\S]*)$/i;
 
-/** `Sender: body` — non-greedy so the first `: ` wins. */
+/** `Sender: body` - non-greedy so the first `: ` wins. */
 const SENDER_SPLIT = /^(.{1,120}?):(?:[\u0020\u00a0\u202f]([\s\S]*))?$/;
 
 /**

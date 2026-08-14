@@ -33,7 +33,7 @@ describe('ingestChat', () => {
     const transcript = readFileSync(path.join(dir, 'transcript.md'), 'utf8');
     expect(transcript).toBe(
       [
-        '# Chai Chat — transcript',
+        '# Chai Chat - transcript',
         '4 messages | Aarav Shah (2), Ishaan Grewal (1), Zoya Khan (1) | 2023-02-07 → 2023-02-08',
         '',
         '## 2023-02-07',
@@ -51,7 +51,7 @@ describe('ingestChat', () => {
     );
 
     const prompt = readFileSync(path.join(dir, 'PROMPT.md'), 'utf8');
-    expect(prompt).toContain('# Otis — persona & report spec'); // persona.md is prepended
+    expect(prompt).toContain('# Otis - persona & report spec'); // persona.md is prepended
     expect(prompt).toContain('**Group name:** Chai Chat');
     expect(prompt).toContain('| Ishaan Grewal | 1 |');
     expect(prompt).toContain('`chatSlug` must be `"chai-chat"`');

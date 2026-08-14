@@ -10,7 +10,7 @@ describe('renderReport (golden fixtures)', () => {
     const html = renderReport(await loadSampleReport(), await loadSampleChat());
 
     expect(html.startsWith('<!doctype html>')).toBe(true);
-    expect(html).toContain('Nobody has ever booked the villa — a report on Trip Council');
+    expect(html).toContain('Nobody has ever booked the villa - a report on Trip Council');
     expect(html).toContain('>Classic Report<');
     expect(html).toContain('Otis');
     expect(html).toContain('An AI with no filter, too many opinions and nowhere else to be.');

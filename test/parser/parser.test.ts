@@ -230,7 +230,7 @@ describe('slugify', () => {
     ['Batch of 2019', 'batch-of-2019'],
     ['HBD Rohit and Karan 🎉🎉', 'hbd-rohit-and-karan'],
     ['  ///  ', 'chat'],
-    ['Valo — Nightshift!', 'valo-nightshift'],
+    ['Valo - Nightshift!', 'valo-nightshift'],
   ])('%s -> %s', (input, expected) => {
     expect(slugify(input)).toBe(expected);
   });

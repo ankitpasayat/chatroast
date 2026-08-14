@@ -7,7 +7,7 @@ import { parseChatWithDiagnostics } from '../../src/parser/index.js';
  * Extra coverage against real (private) WhatsApp exports. Everything in
  * fixtures/chats/private/ is gitignored; this suite runs only on machines
  * that have those files plus an expected.json describing them, and skips
- * everywhere else — a fresh clone runs the synthetic suites only.
+ * everywhere else - a fresh clone runs the synthetic suites only.
  *
  * expected.json shape:
  * {

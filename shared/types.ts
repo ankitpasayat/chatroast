@@ -1,5 +1,5 @@
 // ============================================================
-// FROZEN CONTRACT — do not change shapes without orchestrator
+// FROZEN CONTRACT - do not change shapes without orchestrator
 // approval. All three agents code against this file.
 // ============================================================
 
@@ -80,7 +80,7 @@ export interface Report {
   /** Must match the ParsedChat slug this report was authored against. */
   chatSlug: string;
   reportType: 'classic';
-  /** Roast headline, e.g. "Nobody has ever booked the villa — a report on Chai Chat". */
+  /** Roast headline, e.g. "Nobody has ever booked the villa - a report on Chai Chat". */
   title: string;
   groupName: string;
   persona: { name: string; tagline: string };
@@ -107,6 +107,6 @@ export interface Report {
 //   work/<slug>/PROMPT.md        persona + instructions for the report author
 //   work/<slug>/report.json      Report (appears later; authored out-of-band)
 // A chat is 'ready' when work/<slug>/report.json exists AND validates:
-//   - parses as Report, chatSlug matches, every quote msgIndex in range.
+// - parses as Report, chatSlug matches, every quote msgIndex in range.
 // Invalid report.json -> stays 'pending', server logs the validation error.
 // ------------------------------------------------------------

@@ -8,7 +8,8 @@
     "start": "tsx src/server/index.ts",
     "ingest": "tsx src/cli/ingest.ts",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:web": "node web/build.mjs"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.0",
@@ -17,6 +18,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "esbuild": "^0.28.2",
+    "fake-indexeddb": "^6.2.5",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0",
     "vitest": "^3.0.0"

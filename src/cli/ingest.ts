@@ -6,7 +6,7 @@ import { ingestChat } from '../parser/ingest.js';
 
 const WORK_DIR = path.resolve('work');
 
-/** A line that starts like either export format — used to spot the chat .txt in a zip. */
+/** A line that starts like either export format - used to spot the chat .txt in a zip. */
 const LOOKS_LIKE_CHAT =
   /^[‎‏\s]*(?:\[\d{1,2}[./-]\d{1,2}[./-]\d{2,4},|\d{1,2}[./-]\d{1,2}[./-]\d{2,4}, ?\d{1,2}:\d{2})/;
 

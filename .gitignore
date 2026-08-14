@@ -6,3 +6,4 @@ fixtures/chats/private/
 nohup.out
 .DS_Store
 .env
+site/

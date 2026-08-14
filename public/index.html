@@ -6,7 +6,7 @@
 <title>What does Otis think of your group chat?</title>
 <meta name="description" content="Upload a WhatsApp chat export and get a report on your group, written by an AI with no filter.">
 <link rel="stylesheet" href="./style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕶</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.85em' font-size='80' font-family='Georgia,serif' font-weight='bold'>O</text></svg>">
 </head>
 <body>
 <main class="column">
@@ -16,7 +16,7 @@
   <h1 class="display">What does Otis think of your group chat?</h1>
 
   <div class="byline">
-    <span class="avatar" aria-hidden="true">🕶</span>
+    <span class="avatar" aria-hidden="true">O</span>
     <div class="byline-text">
       <strong>Otis</strong>
       <span class="muted">An AI with no filter, too many opinions and nowhere else to be.</span>
@@ -25,7 +25,7 @@
 
   <p class="lede">
     Export a WhatsApp group chat, drop the file below, and Otis reads the whole thing so
-    you don't have to. Your chat is unzipped in your browser &mdash; the media never leaves your
+    you don't have to. Your chat is unzipped in your browser - the media never leaves your
     machine, only the text does.
   </p>
 
@@ -34,7 +34,7 @@
     <h2 id="upload-h" class="sr-only">Upload your chat export</h2>
 
     <label class="dropzone" id="dropzone" for="file">
-      <span class="drop-icon" aria-hidden="true">💬</span>
+      <span class="drop-icon" aria-hidden="true">+</span>
       <span class="drop-title">Drop your WhatsApp export here</span>
       <span class="drop-sub">a <code>.zip</code> from &ldquo;Export Chat&rdquo;, or the <code>_chat.txt</code> inside it</span>
       <span class="btn" aria-hidden="true">Choose a file</span>
@@ -59,9 +59,9 @@
     <h2 id="result-h" class="serif" >Got it.</h2>
 
     <dl class="stats">
-      <div><dt>Group</dt><dd id="stat-group">&mdash;</dd></div>
-      <div><dt>Messages</dt><dd id="stat-count">&mdash;</dd></div>
-      <div><dt>Dates</dt><dd id="stat-range">&mdash;</dd></div>
+      <div><dt>Group</dt><dd id="stat-group">-</dd></div>
+      <div><dt>Messages</dt><dd id="stat-count">-</dd></div>
+      <div><dt>Dates</dt><dd id="stat-range">-</dd></div>
     </dl>
 
     <table class="senders" id="senders-table" hidden>
@@ -71,7 +71,7 @@
     </table>
 
     <div class="state pending" id="state-pending" hidden>
-      <p><strong>Otis has your chat.</strong> The report is being written &mdash; this app is
+      <p><strong>Otis has your chat.</strong> The report is being written - this app is
       running in local authoring mode. Leave this page open or come back later.</p>
       <p class="muted small" id="poll-note">Checking every 5 seconds&hellip;</p>
     </div>

@@ -1,5 +1,5 @@
 /**
- * Hono routes. Portable — no Node APIs here; all I/O goes through the storage
+ * Hono routes. Portable - no Node APIs here; all I/O goes through the storage
  * module and static file serving is injected by the runtime entry (index.ts).
  */
 import { Hono } from 'hono';
@@ -34,7 +34,7 @@ async function loadIngest(): Promise<IngestChat | null> {
     return typeof mod.ingestChat === 'function' ? mod.ingestChat : null;
   } catch (err) {
     // Distinguishes "not written yet" from "written but broken" in the log.
-    console.error(`[server] parser unavailable — ${(err as Error).message}`);
+    console.error(`[server] parser unavailable - ${(err as Error).message}`);
     return null;
   }
 }

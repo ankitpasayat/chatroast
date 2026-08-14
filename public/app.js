@@ -1,4 +1,4 @@
-// chatroast — landing page.
+// chatroast - landing page.
 // Plain ES modules, no build step. The chat .zip is opened in the browser;
 // only the extracted chat text is ever sent to the server.
 
@@ -19,7 +19,7 @@ const decode = (bytes) => {
  *
  * `bytes` is the whole file; `filename` decides how it is read. A `.txt` is
  * returned as-is; anything else is treated as a zip and only .txt entries are
- * decompressed — fflate's filter skips the media without inflating it, so a
+ * decompressed - fflate's filter skips the media without inflating it, so a
  * 150 MB export costs about as much as a 150 KB one.
  *
  * @param {Uint8Array} bytes
@@ -64,7 +64,7 @@ export function formatRange(firstTs, lastTs) {
       ? String(ts ?? '').slice(0, 10)
       : d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
   };
-  if (!firstTs && !lastTs) return '—';
+  if (!firstTs && !lastTs) return ' - ';
   return `${fmt(firstTs)} – ${fmt(lastTs)}`;
 }
 
@@ -117,7 +117,7 @@ function init() {
       let data;
       try {
         const res = await fetch(`/api/chats/${encodeURIComponent(slug)}`);
-        if (!res.ok) return; // transient — keep waiting quietly
+        if (!res.ok) return; // transient - keep waiting quietly
         data = await res.json();
       } catch {
         return;
@@ -134,7 +134,7 @@ function init() {
     $('stat-count').textContent =
       typeof stats?.messageCount === 'number'
         ? `${stats.messageCount.toLocaleString()} messages`
-        : '—';
+        : ' - ';
     $('stat-range').textContent = formatRange(stats?.firstTs, stats?.lastTs);
 
     const table = $('senders-table');
@@ -185,7 +185,7 @@ function init() {
       return;
     }
 
-    say(`Read ${name} — done.`);
+    say(`Read ${name} - done.`);
     dropzone.classList.remove('busy');
     busy = false;
 
@@ -238,12 +238,12 @@ function init() {
     try {
       found = extractChatText(bytes, file.name);
     } catch {
-      fail('That zip could not be opened — it may be incomplete or not a WhatsApp export. Try exporting the chat again.');
+      fail('That zip could not be opened - it may be incomplete or not a WhatsApp export. Try exporting the chat again.');
       return;
     }
 
     if (!found) {
-      fail('No chat transcript found in that zip. A WhatsApp export contains a _chat.txt (or “WhatsApp Chat with …”.txt) — make sure you are uploading the file WhatsApp gave you.');
+      fail('No chat transcript found in that zip. A WhatsApp export contains a _chat.txt (or “WhatsApp Chat with …”.txt) - make sure you are uploading the file WhatsApp gave you.');
       return;
     }
 

@@ -238,7 +238,7 @@ export function renderIndexPlaceholder(
       : `<ul>${reports
           .map(
             (r) =>
-              `<li><a href="/r/${encodeURIComponent(r.id)}">${escapeHtml(r.title)}</a> <span class="persona-tagline">&mdash; ${escapeHtml(r.groupName)}</span></li>`
+              `<li><a href="/r/${encodeURIComponent(r.id)}">${escapeHtml(r.title)}</a> <span class="persona-tagline">- ${escapeHtml(r.groupName)}</span></li>`
           )
           .join('\n')}</ul>`;
   return document_(

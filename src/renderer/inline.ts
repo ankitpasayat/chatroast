@@ -1,6 +1,6 @@
 /**
  * Inline markup for report text. Contract: only **bold**, *italic*, `code`.
- * HTML is escaped FIRST, always — markup is applied to already-escaped text so
+ * HTML is escaped FIRST, always - markup is applied to already-escaped text so
  * nothing authored in a report or a chat can inject markup.
  */
 

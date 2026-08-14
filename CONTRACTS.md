@@ -1,19 +1,19 @@
-# CONTRACTS — read this first
+# CONTRACTS - read this first
 
 Local-first web app: WhatsApp chat export zip → parsed transcript → "Otis" roast
 report (JSON) → styled report page at `/r/<id>` (print CSS = PDF). Reports are authored
 out-of-band for now (a human/LLM writes `work/<slug>/report.json`); an API generator
 comes later. Stack: TypeScript, Hono on `@hono/node-server` (will move to Cloudflare
-Workers later — keep Node-specific code in the server entry & a storage module, keep
+Workers later - keep Node-specific code in the server entry & a storage module, keep
 Hono routes portable). Deps are installed; do not add new dependencies.
 
-**Type + API + filesystem contract:** `shared/types.ts` (frozen — do not edit).
+**Type + API + filesystem contract:** `shared/types.ts` (frozen - do not edit).
 **Report voice spec:** `shared/persona.md` (context only).
 **Fixtures:** `fixtures/chats/*.txt` (synthetic exports; real ones may exist locally
 under the gitignored `fixtures/chats/private/`), `fixtures/sample-chat.json`,
 `fixtures/sample-report.json` (hand-authored; renderer's golden input).
 
-## File ownership — hard boundaries
+## File ownership - hard boundaries
 
 | Owner   | Paths (exclusive write access) |
 |---------|-------------------------------|
@@ -27,7 +27,7 @@ or blocking, note it in your final report instead of changing it.
 
 ## Cross-module imports
 
-- Everyone imports types from `../../shared/types.js` (NodeNext ESM — use `.js`
+- Everyone imports types from `../../shared/types.js` (NodeNext ESM - use `.js`
   extension in imports).
 - Agent B imports the parser as `parseChat(filename: string, text: string): ParsedChat`
   from `src/parser/index.ts`. Agent A must export exactly that. Until A lands, B codes
@@ -41,7 +41,7 @@ or blocking, note it in your final report instead of changing it.
 ## transcript.md format (Agent A writes it; humans/LLMs read it to author reports)
 
 ```
-# <Group name> — transcript
+# <Group name> - transcript
 <messageCount> messages | <senders summary: Name (count), ...> | <first date> → <last date>
 
 ## <YYYY-MM-DD>
@@ -76,7 +76,7 @@ msgIndexes from transcript.md."
 
 ## Visual spec for the report page (Agent B) and landing (Agent C)
 
-Reference visual spec — match this:
+Reference visual spec - match this:
 
 - Page: white background, single centered column, max-width ~680px, generous
   whitespace. Body font: system sans (-apple-system, Segoe UI, Roboto). ~17px/1.6.
@@ -86,7 +86,7 @@ Reference visual spec — match this:
   amber circle), persona name bold + tagline muted.
 - Section headings: centered; a ~64px circle (very light gray border, white bg) with
   the emoji inside, then serif title ~32px, then a small divider `—— ◆ ——` muted.
-- Chat bubbles: WhatsApp-style — light green `#d9fdd3`, rounded 12px (4px top-left),
+- Chat bubbles: WhatsApp-style - light green `#d9fdd3`, rounded 12px (4px top-left),
   padding 10px 14px, max-width ~85%, left-aligned, dark text, preserving newlines;
   bottom-right inside the bubble a small blue double-check `✓✓` (`#53bdeb`, 11px).
   Consecutive quotes in one `quote` block stack with 8px gap.
@@ -94,7 +94,7 @@ Reference visual spec — match this:
 - `lexicon` terms: monospace chips, light gray bg `#f0f0f0`, rounded 6px, padding
   2px 8px, joined into flowing prose with the notes.
 - Inline markup: **bold**, *italic*, `code` (same chip style). Escape all HTML.
-- Print CSS: `@media print` — hide any nav/footer chrome, keep colors
+- Print CSS: `@media print` - hide any nav/footer chrome, keep colors
   (`print-color-adjust: exact`), sensible page margins; the page should print to a
   clean PDF matching the screen layout.
 - Landing page (C): same typography family; drop zone card, file picker fallback,
