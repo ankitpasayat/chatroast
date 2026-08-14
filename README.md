@@ -11,11 +11,41 @@ reading it. Print the page and it's a clean PDF.
 
 **Local-first and private by design.** Your chat never has to leave your machine:
 the zip is unpacked *in your browser* (media is never uploaded anywhere - only the
-text transcript is read), parsing happens on your own local server, and report
-generation currently runs in "file mode," where you or a coding agent write the
-report locally. No accounts, no cloud, no telemetry.
+text transcript is read). There are two ways to run it: a hosted static page where
+you bring your own API key, or a local server in "file mode" where you or a coding
+agent write the report on your machine. No accounts, no backend, no telemetry
+either way.
 
-## Quick start
+## Use it in your browser (bring your own key)
+
+The hosted version at **<https://ankitpasayat.github.io/chatroast/>** needs no
+install. Drop your export, paste an API key, and Otis writes the report right
+there - streamed into the page.
+
+Supported providers: Anthropic (best results, the persona was tuned on Claude),
+OpenAI, OpenRouter, xAI, local Ollama or LM Studio, or any custom
+OpenAI-compatible endpoint. The provider must allow direct browser (CORS)
+requests; all of the listed ones do, and OpenRouter reaches nearly any model if
+yours does not.
+
+**What happens to your data and your key.** The page is static files served by
+GitHub Pages - there is no server of ours to send anything to. The transcript and
+your key go to exactly one place, the API provider you picked, at the moment you
+click Generate. Chats and reports are stored in your own browser (IndexedDB);
+settings live in localStorage; the key is kept in memory only, unless you
+explicitly tick "remember".
+
+**Pasting an API key into a website means trusting that website's code.** Do not
+take our word for it: the deployed files are built from this repo by a
+[public GitHub Action](https://github.com/ankitpasayat/chatroast/actions) you can
+audit, the JavaScript bundle is deliberately unminified so you can read exactly
+what is deployed, and DevTools' Network tab shows every request the page makes.
+Use a key with a spending limit, and avoid pasting keys on shared computers.
+
+## Run it locally
+
+Local "file mode" needs no API key at all: a coding agent (or you) authors the
+report as a file, and the local server renders it.
 
 ```sh
 git clone https://github.com/ankitpasayat/chatroast
@@ -65,10 +95,10 @@ Ways to produce it:
   live immediately - the server re-reads `work/` on every request, no restart needed.
 - **By hand**, if you are feeling literary. `fixtures/sample-report.json` is a small
   worked example against `fixtures/sample-chat.json`.
-- **Via an LLM API** - a built-in generator (one structured-output call, prompt =
-  `PROMPT.md`) plus a Cloudflare Workers deployment are the planned next phase; the
-  routes are already portable (Hono) and all filesystem access is isolated in
-  `src/server/storage.ts`.
+- **Via an LLM API** - the [hosted version](https://ankitpasayat.github.io/chatroast/)
+  does exactly this in the browser with your own key. The same prompt and
+  validation code is shared between both modes (`shared/`), so a chat reads
+  identically everywhere.
 
 ### 4. Read, share, print
 
@@ -93,21 +123,32 @@ chat, and every quoted index exists. Check a chat's status with
 - **Browser-side zip extraction** ([fflate](https://github.com/101arrowz/fflate))
   that reads only the transcript entry from the archive - a 100 MB export with
   media costs ~5 ms and never uploads a single photo.
-- **Test suite** across parser, storage, renderer and routes: `npm test`.
+- **Static BYOK app** (`web/`, built by `npm run build:web` into `site/`,
+  deployed by [Actions](.github/workflows/pages.yml)): hash-routed single-page
+  app, no framework, streaming generation against Anthropic or any
+  OpenAI-compatible API, one automatic repair round trip when a model's reply
+  does not validate.
+- **Test suite** across parser, storage, renderer, routes and the web app:
+  `npm test`.
 
 ## Privacy notes
 
 - `work/` (parsed chats + reports) and `sources/` (your export zips) are gitignored -
   they exist only on your machine.
 - All bundled fixtures are synthetic; no real chat data ships with this repo.
-- If you author reports with a cloud-hosted agent or LLM, the transcript is shared
-  with that provider - that's your call to make, per chat.
+- If you author reports with a cloud-hosted agent or LLM (including the hosted
+  BYOK page), the transcript is shared with that provider - that's your call to
+  make, per chat. Reports quote real messages, so treat a finished report as
+  being as private as the chat itself.
+- The hosted page stores everything client-side. To erase it, clear the site's
+  data in your browser.
 
 ## Development
 
 ```sh
-npm test           # vitest: parser, storage, renderer, routes
+npm test           # vitest: parser, storage, renderer, routes, web app
 npm run typecheck  # tsc --noEmit
+npm run build:web  # esbuild → site/ (what GitHub Pages serves)
 ```
 
 `CONTRACTS.md` documents the internal module boundaries, the transcript format, and
