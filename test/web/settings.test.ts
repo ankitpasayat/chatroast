@@ -79,6 +79,14 @@ describe('defaults', () => {
     expect(PROVIDERS.filter((p) => p.model !== '').map((p) => p.id)).toEqual(['anthropic']);
     expect(providerOf('openai').modelPlaceholder).toContain('model id');
   });
+
+  it('points every preset at where its key (or local setup) comes from', () => {
+    for (const p of PROVIDERS) {
+      // custom endpoints have no single home; everything else must link one
+      if (p.id === 'custom') expect(p.keyUrl).toBe('');
+      else expect(p.keyUrl, p.id).toMatch(/^https:\/\//);
+    }
+  });
 });
 
 describe('the key', () => {

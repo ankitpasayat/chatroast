@@ -46,6 +46,10 @@ describe('web/index.html', () => {
     expect(html.indexOf('id="f-models"')).toBeLessThan(html.indexOf('id="models-note"'));
   });
 
+  it('asks for the key before the field whose button needs it', () => {
+    expect(html.indexOf('id="f-key"')).toBeLessThan(html.indexOf('id="f-model"'));
+  });
+
   it('applies the saved theme before first paint and ships the toggle', () => {
     expect(html).toContain("localStorage.getItem('chatroast.theme')");
     expect(html.indexOf('chatroast.theme')).toBeLessThan(html.indexOf('<link rel="stylesheet"'));

@@ -32,6 +32,7 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
   const modelsBtn = byId<HTMLButtonElement>('f-models');
   const modelsList = byId<HTMLDataListElement>('models-list');
   const modelsStatus = byId('models-status');
+  const keyHelp = byId('key-help');
 
   for (const p of PROVIDERS) {
     const opt = document.createElement('option');
@@ -44,6 +45,20 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
     model.placeholder = p.modelPlaceholder;
     key.placeholder = p.keyOptional ? 'usually not needed for a local server' : 'paste your key';
     help.textContent = p.help;
+
+    keyHelp.replaceChildren();
+    if (p.keyUrl !== '') {
+      const link = el('a', undefined, p.keyUrl.replace(/^https:\/\//, ''));
+      link.href = p.keyUrl;
+      link.target = '_blank';
+      link.rel = 'noreferrer';
+      keyHelp.append(
+        p.keyOptional
+          ? 'No key to create. Local server setup and CORS guide: '
+          : `New to ${p.label}? Keys are created in your account at `,
+        link,
+      );
+    }
   };
 
   const fill = (s: Settings): void => {
@@ -74,7 +89,7 @@ export function mountSettingsForm(host: HTMLElement, onSaved?: (s: Settings) => 
       return;
     }
     if (key.value.trim() === '' && !p.keyOptional) {
-      modelsStatus.textContent = `Add your ${p.label} API key first: the model list is behind it.`;
+      modelsStatus.textContent = `Add your ${p.label} API key above: the model list is behind it.`;
       return;
     }
     modelsBtn.disabled = true;

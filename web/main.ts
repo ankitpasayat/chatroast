@@ -41,23 +41,29 @@ async function render(): Promise<void> {
 }
 
 /**
- * Light is the default; dark only when explicitly chosen (matching the inline
- * bootstrap in index.html, which applies the saved choice before first paint).
- * The switch itself is a full-page cross-fade via the View Transitions API;
- * browsers without it, and reduced-motion users, switch instantly.
+ * The page follows the system color scheme until the toggle is used once; from
+ * then on the stored choice wins (html.dark / html.light, applied before first
+ * paint by the inline bootstrap in index.html). The switch itself is a
+ * full-page cross-fade via the View Transitions API; browsers without it, and
+ * reduced-motion users, switch instantly.
  */
 function wireThemeToggle(): void {
   const btn = byId<HTMLButtonElement>('theme-toggle');
+  const root = document.documentElement;
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const isDark = (): boolean =>
+    root.classList.contains('dark') || (!root.classList.contains('light') && systemDark.matches);
   const sync = (): void => {
-    const dark = document.documentElement.classList.contains('dark');
-    btn.textContent = dark ? 'Light' : 'Dark';
-    btn.setAttribute('aria-pressed', String(dark));
-    btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    btn.setAttribute('aria-pressed', String(isDark()));
+    btn.setAttribute('aria-label', isDark() ? 'Switch to light mode' : 'Switch to dark mode');
   };
+
   btn.addEventListener('click', () => {
-    const next = !document.documentElement.classList.contains('dark');
+    const next = !isDark();
     const apply = (): void => {
-      document.documentElement.classList.toggle('dark', next);
+      root.classList.toggle('dark', next);
+      root.classList.toggle('light', !next);
       try {
         localStorage.setItem('chatroast.theme', next ? 'dark' : 'light');
       } catch {
@@ -73,6 +79,7 @@ function wireThemeToggle(): void {
       apply();
     }
   });
+  systemDark.addEventListener('change', sync);
   sync();
 }
 

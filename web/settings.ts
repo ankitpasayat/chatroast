@@ -26,6 +26,8 @@ export interface Provider {
   modelPlaceholder: string;
   /** Local runtimes usually accept any key, or none. */
   keyOptional: boolean;
+  /** Where a key is created (or, for local runtimes, the setup guide). Empty: no single place. */
+  keyUrl: string;
   help: string;
 }
 
@@ -40,6 +42,7 @@ export const PROVIDERS: Provider[] = [
     model: 'claude-opus-5',
     modelPlaceholder: 'claude-opus-5',
     keyOptional: false,
+    keyUrl: 'https://console.anthropic.com/settings/keys',
     help: 'claude-opus-5 writes the best reports. claude-sonnet-5 is the cheaper alternative and still very good.',
   },
   {
@@ -50,6 +53,7 @@ export const PROVIDERS: Provider[] = [
     model: '',
     modelPlaceholder: ANY_MODEL,
     keyOptional: false,
+    keyUrl: 'https://platform.openai.com/api-keys',
     help: 'Any chat model your key can reach. Pick one with a large context window: a year of group chat is a lot of tokens.',
   },
   {
@@ -60,6 +64,7 @@ export const PROVIDERS: Provider[] = [
     model: '',
     modelPlaceholder: ANY_MODEL,
     keyOptional: false,
+    keyUrl: 'https://openrouter.ai/settings/keys',
     help: 'Model ids look like vendor/model, for example anthropic/claude-sonnet-4.5. OpenRouter is the easiest way to reach almost any model from a browser.',
   },
   {
@@ -70,6 +75,7 @@ export const PROVIDERS: Provider[] = [
     model: '',
     modelPlaceholder: ANY_MODEL,
     keyOptional: false,
+    keyUrl: 'https://console.x.ai',
     help: 'Model ids look like grok-4.',
   },
   {
@@ -80,6 +86,7 @@ export const PROVIDERS: Provider[] = [
     model: '',
     modelPlaceholder: ANY_MODEL,
     keyOptional: true,
+    keyUrl: 'https://docs.ollama.com/faq',
     help: 'Runs on your own machine, so nothing leaves it. No key needed. Set OLLAMA_ORIGINS so the browser is allowed to call it, and use a model with a big context window.',
   },
   {
@@ -90,6 +97,7 @@ export const PROVIDERS: Provider[] = [
     model: '',
     modelPlaceholder: ANY_MODEL,
     keyOptional: true,
+    keyUrl: 'https://lmstudio.ai/docs/app/api',
     help: 'Runs on your own machine, so nothing leaves it. No key needed. Start the local server and enable CORS in its settings.',
   },
   {
@@ -100,6 +108,7 @@ export const PROVIDERS: Provider[] = [
     model: '',
     modelPlaceholder: ANY_MODEL,
     keyOptional: true,
+    keyUrl: '',
     help: 'Any endpoint that implements POST /chat/completions the way OpenAI does. Give the base URL up to and including /v1.',
   },
 ];

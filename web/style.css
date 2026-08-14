@@ -30,7 +30,9 @@
   color-scheme: light;
 }
 
-/* Dark is an explicit choice (the toggle), never inferred from the system. */
+/* The dark palette applies two ways: html.dark (the toggle's explicit choice)
+   and, until the toggle has ever been used, the system scheme. The token block
+   is therefore written twice; keep both copies identical. */
 html.dark {
   --bg: #101010;
   --ink: #ececec;
@@ -53,6 +55,32 @@ html.dark {
   --danger-line: #5a2a2a;
   --danger-bg: #2a1616;
   color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light) {
+    --bg: #101010;
+    --ink: #ececec;
+    --muted: #9d9d9d;
+    --lede: #cfcfcf;
+    --line: #262626;
+    --soft: #3a3a3a;
+    --hover-line: #6a6a6a;
+    --hover-bg: #181818;
+    --card: #1a1a1a;
+    --code-bg: #222222;
+    --bubble: #123a2a;
+    --green: #34b671;
+    --warn-bg: #241c07;
+    --warn-line: #6d5a1e;
+    --trust-link: #e8c76a;
+    --btn-fg: #101010;
+    --btn-hover: #ffffff;
+    --danger-fg: #e08f8f;
+    --danger-line: #5a2a2a;
+    --danger-bg: #2a1616;
+    color-scheme: dark;
+  }
 }
 
 /* The mode switch is a single full-page cross-fade (started from main.ts via
@@ -387,20 +415,40 @@ code {
 
 /* ---------- theme toggle ---------- */
 
+/* fixed at the top right, on the same line as the in-page top nav */
 .theme-toggle {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  right: 20px;
+  top: 32px;
   z-index: 10;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
   border: 1px solid var(--soft);
-  border-radius: 999px;
-  padding: 7px 16px;
-  font: 600 13px var(--sans);
+  border-radius: 50%;
   background: var(--bg);
   color: var(--muted);
   cursor: pointer;
 }
 .theme-toggle:hover { color: var(--ink); border-color: var(--ink); }
+.theme-toggle svg { display: block; }
+
+/* the moon invites dark mode, the sun invites light; both media- and class-aware */
+.theme-toggle .icon-sun { display: none; }
+html.dark .theme-toggle .icon-sun { display: block; }
+html.dark .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  html:not(.light) .theme-toggle .icon-sun { display: block; }
+  html:not(.light) .theme-toggle .icon-moon { display: none; }
+}
+
+/* keep the nav rows clear of the fixed toggle once the column nears the edge */
+@media (max-width: 800px) {
+  .topnav { padding-right: 48px; }
+  .report-bar { padding-right: 48px; }
+}
 
 @media (max-width: 480px) {
   .column { padding: 28px 18px 72px; }
