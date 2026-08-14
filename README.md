@@ -116,4 +116,7 @@ shapes; `shared/persona.md` is the Otis voice spec.
 
 ## License
 
-MIT
+[AGPL-3.0-or-later](LICENSE). Free as in freedom: you can use, study, modify and
+share chatroast, commercially or not — but if you distribute it or run a modified
+version as a network service, you must offer your users the source under the same
+terms. It stays free for everyone, forever.
