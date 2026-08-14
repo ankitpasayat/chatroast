@@ -31,12 +31,24 @@ async function route(): Promise<void> {
   await mountLanding(app);
 }
 
+/**
+ * The toggle is one long-lived element (its listeners survive re-renders);
+ * each view render moves it into that view's nav row, left of the links.
+ */
+function placeThemeToggle(): void {
+  const btn = byId<HTMLButtonElement>('theme-toggle');
+  const home = document.querySelector('.topnav') ?? document.querySelector('.report-bar') ?? byId('app');
+  home.prepend(btn);
+  btn.hidden = false;
+}
+
 async function render(): Promise<void> {
   try {
     await route();
   } catch (err) {
     fatal(byId('app'), `Something in this page broke: ${err instanceof Error ? err.message : String(err)}`);
   }
+  placeThemeToggle();
   window.scrollTo({ top: 0 });
 }
 

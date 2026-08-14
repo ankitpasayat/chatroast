@@ -133,6 +133,7 @@ a { color: inherit; }
 .topnav {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 16px;
   margin-bottom: 20px;
   font-size: 15px;
@@ -401,7 +402,7 @@ code {
 
 /* ---------- report view ---------- */
 
-.report-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.report-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
 .report-frame {
   display: block;
   width: 100%;
@@ -415,14 +416,11 @@ code {
 
 /* ---------- theme toggle ---------- */
 
-/* fixed at the top right, on the same line as the in-page top nav */
+/* lives inline in each view's nav row, left of the links (moved there by main.ts) */
 .theme-toggle {
-  position: fixed;
-  right: 20px;
-  top: 32px;
-  z-index: 10;
   width: 34px;
   height: 34px;
+  flex: 0 0 auto;
   display: grid;
   place-items: center;
   padding: 0;
@@ -432,6 +430,7 @@ code {
   color: var(--muted);
   cursor: pointer;
 }
+.theme-toggle[hidden] { display: none; }
 .theme-toggle:hover { color: var(--ink); border-color: var(--ink); }
 .theme-toggle svg { display: block; }
 
@@ -444,11 +443,6 @@ html.dark .theme-toggle .icon-moon { display: none; }
   html:not(.light) .theme-toggle .icon-moon { display: none; }
 }
 
-/* keep the nav rows clear of the fixed toggle once the column nears the edge */
-@media (max-width: 800px) {
-  .topnav { padding-right: 48px; }
-  .report-bar { padding-right: 48px; }
-}
 
 @media (max-width: 480px) {
   .column { padding: 28px 18px 72px; }
