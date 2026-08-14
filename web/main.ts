@@ -34,12 +34,15 @@ async function route(): Promise<void> {
 /**
  * The toggle is one long-lived element (its listeners survive re-renders);
  * each view render moves it into that view's nav row, left of the links.
+ * The reference is captured once: after a render detaches it, getElementById
+ * can no longer find it, so a per-render byId lookup would throw.
  */
+const themeToggleBtn = byId<HTMLButtonElement>('theme-toggle');
+
 function placeThemeToggle(): void {
-  const btn = byId<HTMLButtonElement>('theme-toggle');
   const home = document.querySelector('.topnav') ?? document.querySelector('.report-bar') ?? byId('app');
-  home.prepend(btn);
-  btn.hidden = false;
+  home.prepend(themeToggleBtn);
+  themeToggleBtn.hidden = false;
 }
 
 async function render(): Promise<void> {
@@ -60,7 +63,7 @@ async function render(): Promise<void> {
  * reduced-motion users, switch instantly.
  */
 function wireThemeToggle(): void {
-  const btn = byId<HTMLButtonElement>('theme-toggle');
+  const btn = themeToggleBtn;
   const root = document.documentElement;
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 
