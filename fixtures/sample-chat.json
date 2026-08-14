@@ -1,0 +1,33 @@
+{
+  "slug": "sample-chat",
+  "groupName": "Trip Council",
+  "format": "ios",
+  "messages": [
+    { "index": 0, "ts": "2024-02-01T10:00:00", "sender": null, "kind": "system", "text": "Maya created this group" },
+    { "index": 1, "ts": "2024-02-01T10:01:10", "sender": "Maya", "kind": "text", "text": "manifesting goa 2024" },
+    { "index": 2, "ts": "2024-02-01T10:02:05", "sender": "Dev Khanna", "kind": "text", "text": "booked nothing but sure" },
+    { "index": 3, "ts": "2024-02-01T10:04:00", "sender": "Sam", "kind": "media", "mediaType": "photo", "text": "00000001-PHOTO-2024-02-01-10-04-00.jpg" },
+    { "index": 4, "ts": "2024-02-01T10:05:21", "sender": "Priya Nair", "kind": "text", "text": "I found a villa for 12k total 🏝️" },
+    { "index": 5, "ts": "2024-02-01T10:07:02", "sender": "Priya Nair", "kind": "text", "text": "wait it's 12k per night 💀" },
+    { "index": 6, "ts": "2024-02-01T10:07:30", "sender": "Dev Khanna", "kind": "text", "text": "classic priya math" },
+    { "index": 7, "ts": "2024-03-14T18:20:00", "sender": "Zain", "kind": "text", "text": "Also an announcement guys - I got the promotion" },
+    { "index": 8, "ts": "2024-03-14T18:20:40", "sender": "Maya", "kind": "text", "text": "who is this" },
+    { "index": 9, "ts": "2024-03-14T18:21:00", "sender": "Sam", "kind": "text", "text": "new phone who dis" },
+    { "index": 10, "ts": "2024-03-14T18:22:15", "sender": "Zain", "kind": "text", "text": "we have been friends for nine years" },
+    { "index": 11, "ts": "2024-03-14T18:25:00", "sender": "Maya", "kind": "text", "text": "congrats zain 🎉" },
+    { "index": 12, "ts": "2024-06-02T21:00:00", "sender": "Sam", "kind": "text", "text": "ok final plan:\nnobody books anything and we call it a tradition" },
+    { "index": 13, "ts": "2024-06-02T21:03:00", "sender": "Dev Khanna", "kind": "text", "text": "soft launching my resignation, please engage" },
+    { "index": 14, "ts": "2024-06-02T21:04:10", "sender": "Priya Nair", "kind": "text", "text": "should we do a poll", "edited": true },
+    { "index": 15, "ts": "2024-06-02T21:04:30", "sender": "Dev Khanna", "kind": "text", "text": "++" }
+  ],
+  "senders": [
+    { "name": "Dev Khanna", "count": 4 },
+    { "name": "Maya", "count": 3 },
+    { "name": "Priya Nair", "count": 3 },
+    { "name": "Sam", "count": 3 },
+    { "name": "Zain", "count": 2 }
+  ],
+  "firstTs": "2024-02-01T10:00:00",
+  "lastTs": "2024-06-02T21:04:30",
+  "messageCount": 15
+}

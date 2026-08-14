@@ -1,0 +1,43 @@
+{
+  "id": "44e64d15-6139-49cf-aaa6-40e18bad0d72",
+  "chatSlug": "sample-chat",
+  "reportType": "classic",
+  "title": "Nobody has ever booked the villa — a report on Trip Council",
+  "groupName": "Trip Council",
+  "persona": {
+    "name": "Otis",
+    "tagline": "An AI with no filter, too many opinions and nowhere else to be."
+  },
+  "blocks": [
+    { "type": "paragraph", "text": "Alright. Otis here. I've read 15 messages of your lives and the finding is already total: this group exists for exactly two activities, **planning trips** and **never taking them**. The gap between those two is where all of you live." },
+    { "type": "paragraph", "text": "The villa arc alone tells the whole story. A destination was manifested, a budget was invented, and the plan died of arithmetic within two minutes. Let the record show:" },
+    { "type": "heading", "emoji": "🧍", "title": "The Roster" },
+    { "type": "paragraph", "text": "**Priya** — the group's chief financial officer, in the sense that she produces numbers:" },
+    { "type": "quote", "msgIndexes": [4, 5] },
+    { "type": "paragraph", "text": "**Zain** — announced a life milestone and received an identity check:" },
+    { "type": "quote", "msgIndexes": [7] },
+    { "type": "quote", "msgIndexes": [8, 9] },
+    { "type": "paragraph", "text": "Nine years of friendship, and the man had to authenticate himself. That's a legacy, Zain." },
+    { "type": "paragraph", "text": "**Sam** — the group's process owner, who finally wrote the standard operating procedure down:" },
+    { "type": "quote", "msgIndexes": [12] },
+    { "type": "heading", "emoji": "🏆", "title": "The Awards" },
+    { "type": "entry", "label": "Best Deadpan", "text": "Sam, when Zain announced the promotion: \"new phone who dis.\"" },
+    { "type": "entry", "label": "Green Flag", "text": "Every milestone gets congratulated within minutes, even mid-roast. You people are actually tender under all the villa math discourse." },
+    { "type": "heading", "emoji": "🗣", "title": "The Lexicon" },
+    { "type": "lexicon", "terms": [
+      { "term": "manifesting", "note": "(the trip-planning methodology)" },
+      { "term": "villa math", "note": "(*allegedly* 12k total)" },
+      { "term": "++", "note": "as a democratic vote" }
+    ] },
+    { "type": "paragraph", "text": "And the vote that defines this chat's decision-making culture, on whether to do a poll about doing a poll:" },
+    { "type": "quote", "msgIndexes": [15] },
+    { "type": "heading", "emoji": "📊", "title": "The Honest Power Map" },
+    { "type": "entry", "label": "Logistics power", "text": "Nobody. That is the finding. The seat is empty and the villa remains unbooked." },
+    { "type": "entry", "label": "Comedy power", "text": "Sam, on batting average. \"new phone who dis\" did more damage than any itinerary ever could." },
+    { "type": "heading", "emoji": "🔮", "title": "What Happens When You Read This" },
+    { "type": "paragraph", "text": "**Maya** replies `+1`. **Dev** replies `++`. **Priya** finds a new villa, cheaper, further, equally unbooked. **Zain** announces something and gets asked for ID. **Sam** says nothing for four days and then drops one line better than anything I've written here." },
+    { "type": "paragraph", "text": "The genuinely unusual thing about you: the trip never happened and the chat survived anyway. Most groups die at the first cancelled plan. It got *funnier* instead, because **the plan was never the point**." },
+    { "type": "paragraph", "text": "Book the villa. Or don't. It got you this far." }
+  ],
+  "createdAt": "2026-08-14T00:00:00Z"
+}

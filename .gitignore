@@ -1,0 +1,8 @@
+node_modules/
+work/
+sources/
+fixtures/chats/private/
+*.log
+nohup.out
+.DS_Store
+.env
